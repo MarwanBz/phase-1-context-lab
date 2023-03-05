@@ -21,3 +21,76 @@ const allWagesFor = function () {
     return payable
 }
 
+function createEmployeeRecord(employeeData) {
+  return {
+    firstName: employeeData[0],
+    familyName: employeeData[1],
+    title: employeeData[2],
+    payPerHour: employeeData[3],
+    timeInEvents: [],
+    timeOutEvents: []
+  };
+}
+
+function createEmployeeRecords(arr) {
+  return arr.map(createEmployeeRecord);
+}
+
+function createTimeInEvent(record, dateStamp) {
+  const [date, hour] = dateStamp.split(" ");
+
+  record.timeInEvents.push({
+    type: "TimeIn",
+    hour: parseInt(hour, 10),
+    date
+  });
+
+  return record;
+}
+
+function createTimeOutEvent(record, dateStamp) {
+  const [date, hour] = dateStamp.split(" ");
+
+  record.timeOutEvents.push({
+    type: "TimeOut",
+    hour: parseInt(hour, 10),
+    date
+  });
+
+  return record;
+}
+
+function hoursWorkedOnDate(record, date) {
+  const timeInEvent = record.timeInEvents.find(event => event.date === date);
+  const timeOutEvent = record.timeOutEvents.find(
+    event => event.date === date
+  );
+
+  return (timeOutEvent.hour - timeInEvent.hour) / 100;
+}
+
+// function wagesEarnedOnDate(record, date) {
+//   const hoursWorked = hoursWorkedOnDate(record, date);
+
+//   return hoursWorked * record.payPerHour;
+// }
+
+// function allWagesFor(record) {
+//   const datesWorked = record.timeInEvents.map(event => event.date);
+//   const wages = datesWorked.reduce((total, date) => {
+//     return total + wagesEarnedOnDate(record, date);
+//   }, 0);
+
+//   return wages;
+// }
+
+// function findEmployeeByFirstName(srcArray, firstName) {
+//   return srcArray.find(record => record.firstName === firstName);
+// }
+
+// function calculatePayroll(records) {
+//   return records.reduce((total, record) => {
+//     return total + allWagesFor(record);
+//   }, 0);
+// }
+
